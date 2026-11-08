@@ -9,7 +9,7 @@ actor "National Clearing and Billing System" as BillingSystem
 
 FieldCommander -|> CrewMember
 
-rectangle "Smart Campus Parking, LPR & EV Network" {
+rectangle "CrisisSync system" {
     usecase "Login (Username and Password)" as UC0
     usecase "Manage User Accounts and Permissions" as UC1
     usecase "Run Data Loading Module" as UC2
