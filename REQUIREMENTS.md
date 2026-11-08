@@ -11,7 +11,6 @@
 - **Student 3:** Yasmin Askarov | **ID:** 323017012 | **Braude Email:** yasmin.askarov@e.braude.ac.il
 - **Student 4:** Lihi Elias | **ID:** 319041109 | **Braude Email:** lihi.elias@e.braude.ac.il
 
-
 ---
 
 ## 1. System Use Case Diagram (Mermaid.js)
