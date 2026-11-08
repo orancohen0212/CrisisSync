@@ -169,9 +169,9 @@ NFR2.4 : The system shall extract the timestamps for the SLA calculations exclus
 
 
 
-| Req ID     | Requirement Description (Clean English with "shall")                                                                                                   | Type (FR/NFR) | Mapped Use Case | Test ID |
-| :--------- | :-----------------------------------------------------------------------------------------------------------------------------                         | :-----------: | :-------------- | :-----: |
-| **REQ-01** | The system shall automatically cancel a reservation if the LPR camera does not detect vehicle entry within exactly 15 minutes.                         |      FR       | UC_ReserveSpot  | TEST-01 |
+| Req ID     | Requirement Description (Clean English with "shall")                                                                                                                                                     | Type (FR/NFR) | Mapped Use Case | Test ID |
+| :--------- | :-----------------------------------------------------------------------------------------------------------------------------                                                                           | :-----------: | :-------------- | :-----: |
+| **REQ-01** | The system shall allow a Dispatcher to allocate a predefined resource package to a task currently in the 'Ready' state, executing the request as a single atomic SQL transaction.                        |      FR       | UC_ReserveSpot  | TEST-01 |
 | **REQ-02** | The payment gateway authorization shall return a verification token within a maximum latency of 2.5 seconds under peak load.                           |      NFR      | UC_ChargeEV     | TEST-02 |
 | **REQ-03** | The system shall apply a charger idle penalty of 5 NIS per hour starting 30 minutes after 100% charging completion.                                    |      FR       | UC_ChargeEV     | TEST-03 |
 | **REQ-04** | The system shall apply dynamic filtering on the live map to restrict Students to "Student Zone" spots while allowing Faculty to see all zones.         |      FR       | UC_SearchSpot   | TEST-04 |
