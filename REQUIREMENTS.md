@@ -142,14 +142,19 @@ Action 1: Resource Allocation for a Task & Reporting Task Completion
 Functional Requirements (FR):
 
 FR1.1: The system shall allow a Dispatcher to allocate a predefined resource package to a task currently in the 'Ready' state, executing the request as a single atomic SQL transaction.
+
 FR1.2: The system shall immediately release all resources associated with a task (returning their status to 'Available') once the assigned Field Commander reports the task as 'Completed'.
+
 FR1.3: The system shall automatically block the resource allocation process and abort the transaction if even one resource within the requested package is unavailable.
 
 Non-Functional Requirements (NFR):
 
 NFR1.1 : The system shall execute a resource allocation as a single SQL transaction, ensuring a 100% rollback if even 1 requested resource is unavailable, to prevent partial bookings.
+
 NFR1.2 : The system shall push real-time status updates of the allocation to all relevant client stations immediately, requiring exactly 0 polling requests from the clients. 
+
 NFR1.3 : The system shall mandate that 100% of users, including the Dispatcher performing the allocation, are authenticated via username and password before granting access.  
+
 NFR1.4 : The system shall support concurrent dispatcher actions exclusively over a Local Area Network (LAN) utilizing the OCSF framework over TCP/IP, without using a Web-based interface.
 
 Action 2: Time Compliance and SLA Report Generation
@@ -157,14 +162,19 @@ Action 2: Time Compliance and SLA Report Generation
 Functional Requirements (FR):
 
 FR2.1: The system shall automatically generate the SLA report exactly at the end of each month, triggered internally by the system clock.
+
 FR2.2: The system shall allow a System Administrator to manually generate an SLA report on-demand for any 1 selected past month.
+
 FR2.3: The system shall calculate the SLA metric by computing the average time elapsed from the opening of an event until the closure of the last task within that event, grouped strictly by event types.
 
 Non-Functional Requirements (NFR):
 
 NFR2.1 : The system shall restrict access to ensure that 100% of SLA report generation and viewing actions are permitted exclusively to the "System Administrator" role, blocking the other 4 user roles.
+
 NFR2.2 : The system's reporting module architecture shall be designed to ensure that adding any new report type in the future requires minimal development effort.
+
 NFR2.3 : The system's graphical interface shall present the SLA report clearly segmented into exactly 5 distinct visual categories, strictly corresponding to the predefined closed list of event types.
+
 NFR2.4 : The system shall extract the timestamps for the SLA calculations exclusively from the system's Audit Log, relying on its 100% read-only chronological records of event openings and task state changes.
 
 
