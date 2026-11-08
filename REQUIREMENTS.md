@@ -206,40 +206,39 @@ Author two complete BDD acceptance tests corresponding to the Test IDs in your R
 - Test 2: Exception, Fault, or Automated Penalty Flow.
 -->
 
-### Acceptance Test [TEST-01]: LPR Successful Gate Entry (Happy Path)
+### Acceptance Test [TEST-01]: Successful Resource Allocation (Happy Path)
 
-- **Given:** A student has an active parking permit and their vehicle approaches the entrance gate.
-- **When:** The LPR camera successfully scans and matches the registered license plate.
-- **Then:** The system must send an automated command to open the barrier gate.
-- **And:** The system must record the exact entry timestamp in the access audit log.
-
-### Acceptance Test [TEST-03]: Charger Idle Penalty Enforcement (Exception / Timeout)
-
-- **Given:** An electric vehicle has reached 100% battery charge at an EV terminal and an SMS alert was dispatched.
-- **When:** Exactly 30 minutes and 1 second elapse without the charging cable being disconnected and vehicle moved.
-- **Then:** The system must start accruing an idle penalty fee of 5 NIS per hour.
-- **And:** The accrued fee must be automatically attached to the owner's billing account ledger.
-
-### Acceptance Test [TEST-04]: Dynamic Map Filtering for Students (Happy Path)
-
-- **Given:** A registered Student is logged into the system and opens the live map to search for available parking spots.
-
-- **When:** The system retrieves the available parking inventory and applies dynamic role-based filtering.
-
-- **Then:** The live map must display only available spots that are located within the "Student Zone".
-
-- **And:** The system must hide all other parking zones from the student's view.
+- **Given:** A Dispatcher is logged into the application and is viewing a task currently in the 'Ready' state, with all required resources in the predefined package marked as 'Available'.
+- **When:** The Dispatcher initiates the allocation of the resource package to the task.
+- **Then:** The system shall successfully allocate the resources, update their statuses to 'Allocated', and transition the task to the 'Active' state.
 
 
-### Acceptance Test [TEST-01]: Reservation Revocation and No-Show Warning (Exception / Penalty Flow)
+### Acceptance Test [TEST-03]: Resource Allocation Blocked Due to Unavailable Resource (Exception / Error Scenario)
 
-- **Given:** A registered user has reserved a parking spot and the 15-minute reservation timer has been initiated.
+- **Given:** A Dispatcher is logged into the application and attempts to allocate a resource package to a task in the 'Ready' state, but at least 1 required resource in the package is 'Unavailable'.
+- **When:** The Dispatcher initiates the allocation process.
+- **Then:** The system shall block the allocation, maintain the task in the 'Ready' state without reserving any resources, and display a clear error message to the Dispatcher.
 
-- **When:** Exactly 15 minutes elapse and the LPR camera has not detected the reserved vehicle entering the specific parking zone.
 
-- **Then:** The system must automatically revoke the parking reservation.
+### Acceptance Test[TEST-08]: Manual SLA Report Generation (Happy Path)
 
-- **And:** The system must flag the user's account with a "No-Show" warning
+- **Given:** A user successfully authenticated with the "System Administrator" role is accessing the reporting module on the JavaFX desktop GUI.
+
+- **When:** The System Administrator selects a specific past month and manually requests the generation of the SLA report
+
+- **Then:** The system shall calculate the correct SLA metrics from the Audit Log timestamps, group the data by the 5 predefined event types, and successfully render the graphical report on the screen.
+
+
+
+### Acceptance Test [TEST-10]:Unauthorized Access to SLA Report Blocked (Exception / Security Error Scenario)
+
+- **Given:** A user logged into the system with the "Dispatcher" or "Field Commander" role (which is not a System Administrator).
+
+- **When:** The user attempts to access the reporting module or trigger the generation of the monthly SLA report.
+
+- **Then:** The system shall completely block the request, prevent any database queries related to the SLA data, and display an "Unauthorized Access" error, ensuring 100% restriction of the action.
+
+
 
 ---
 
