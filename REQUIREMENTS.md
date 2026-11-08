@@ -1,7 +1,7 @@
 # Requirements Architecture & System Specification
 
 **Course:** Software Engineering Methods  
-**System:** Smart Campus Parking, LPR, and EV Network  
+**System:** CrisisSync
 
 
 ### Engineering Team Details
@@ -28,75 +28,77 @@ INSTRUCTIONS FOR STUDENTS:
 
 ```mermaid
 flowchart LR
-    subgraph PRIMARY["Primary Human Actors"]
+    %% Primary Actors (Left)
+    SysAdmin(("System Administrator"))
+    LogisticsOfficer(("Logistics and\nResources Officer"))
+    Dispatcher(("Dispatcher"))
+    FieldCommander(("Field Commander"))
+    CrewMember(("Field Crew Member"))
+
+    %% System Boundary
+    subgraph CrisisSync ["CrisisSync System"]
         direction TB
-        RegisteredUser["Registered User"]
-        Student["Student"]
-        Faculty["Faculty member"]
-        Guest["Guest driver"]
-        SecurityOffice["Security Office staff"]
-        Guard["Campus Security Guard"]
-        Admin["Campus Traffic Administrator"]
+        
+        UC1(["Manage User Accounts and Permissions"])
+        UC2(["Run Data Loading Module"])
+        UC3(["View Event History"])
+        UC4(["Generate Management Reports"])
+        
+        UC5(["Update Equipment Maintenance Status"])
+        UC6(["Transfer Tools Between Stations"])
+        UC7(["Update Crew Member Availability"])
+        
+        UC8(["Open and Cancel Events"])
+        UC9(["Define Task Trees and Dependencies"])
+        UC10(["Reserve and Allocate Resources"])
+        UC11(["Track Event Status in Real-Time"])
+        UC12(["Cancel Individual Tasks"])
+        UC13(["Close Event"])
+        UC13a(["Process Billing Request"])
+        
+        UC14(["View Task and Event Status"])
+        UC15(["Report Task Completion"])
+        
+        UC16(["Report Shift Start and Readiness"])
+        UC17(["View Assigned Task Details"])
+        UC18(["Report Field Equipment Failure"])
+
+        %% Dependencies
+        UC13 -.->|<<include>>| UC13a
+        UC18 -.->|<<extend>>| UC17
     end
 
-    subgraph SYSTEM["Smart Campus Parking, LPR, and EV Network"]
-        direction TB
-        SearchSpots(["Search available spots on live map"])
-        ViewZones(["View role-permitted parking zones"])
-        ReserveSpot(["Reserve a parking spot"])
-        EnterParking(["Enter parking area"])
-        GenerateQR(["Generate Guest QR"])
-        EnterWithQR(["Enter with Temporary QR"])
-        UseEV(["Use EV charging spot"])
-        AuthorizePayment(["Authorize EV payment"])
-        ChargingComplete(["Notify user when charging completes"])
-        RevokeReservation(["Revoke expired reservation"])
-        ApplyPenalty(["Apply hourly Charger Idle Penalty"])
-        RecordViolation(["Record severe violation"])
-        ViewAccount(["View account warnings and fines"])
-        SubmitAppeal(["Submit digital appeal"])
-        ReviewAppeal(["Review and decide appeal"])
-    end
+    %% Secondary Actors / External Systems (Right)
+    BillingSystem(("National Clearing\nand Billing System"))
+    Timer(("System Timer"))
 
-    subgraph EXTERNAL["Secondary Actors / External Systems"]
-        direction TB
-        Occupancy["Parking occupancy / map data source"]
-        EVSE["EV charging station"]
-        Payment["Payment gateway"]
-        SMS["SMS gateway"]
-        Timer["System clock / timer"]
-    end
+    %% Primary Actors Associations
+    SysAdmin --- UC1
+    SysAdmin --- UC2
+    SysAdmin --- UC3
+    SysAdmin --- UC4
 
-    Student --> RegisteredUser
-    Faculty --> RegisteredUser
+    LogisticsOfficer --- UC5
+    LogisticsOfficer --- UC6
+    LogisticsOfficer --- UC7
 
-    RegisteredUser --> SearchSpots
-    RegisteredUser --> ViewZones
-    RegisteredUser --> ReserveSpot
-    RegisteredUser --> EnterParking
-    RegisteredUser --> UseEV
-    RegisteredUser --> ViewAccount
-    RegisteredUser --> SubmitAppeal
-    RegisteredUser --> ChargingComplete
+    Dispatcher --- UC8
+    Dispatcher --- UC9
+    Dispatcher --- UC10
+    Dispatcher --- UC11
+    Dispatcher --- UC12
+    Dispatcher --- UC13
 
-    Guest --> EnterWithQR
-    SecurityOffice --> GenerateQR
-    Guard --> RecordViolation
-    Admin --> ReviewAppeal
+    FieldCommander --- UC14
+    FieldCommander --- UC15
 
-    SearchSpots --- Occupancy
-    UseEV --- EVSE
-    ChargingComplete --- EVSE
-    AuthorizePayment --- Payment
-    ChargingComplete --- SMS
-    RevokeReservation --- Timer
-    ApplyPenalty --- Timer
+    CrewMember --- UC16
+    CrewMember --- UC17
+    CrewMember --- UC18
 
-    ReserveSpot -.->|<<include>>| SearchSpots
-    UseEV -.->|<<include>>| AuthorizePayment
-    RevokeReservation -.->|<<extend>>| ReserveSpot
-    ApplyPenalty -.->|<<extend>>| UseEV
-
+    %% Secondary Actors Associations
+    UC13a --- BillingSystem
+    UC4 --- Timer
     %% Define Dependencies (Dashed arrows with stereotypes)
     %% Note: Verify that <<extend>> arrows point toward the base use case!
 ```
