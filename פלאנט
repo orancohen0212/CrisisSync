@@ -1,0 +1,71 @@
+@startuml
+actor "System Administrator" as SysAdmin
+actor "Logistics and Resources Officer" as LogisticsOfficer
+actor "Dispatcher" as Dispatcher
+actor "Field Crew Member" as CrewMember
+actor "Field Commander" as FieldCommander
+
+actor "National Clearing and Billing System" as BillingSystem
+
+FieldCommander -|> CrewMember
+
+rectangle "Smart Campus Parking, LPR & EV Network" {
+    usecase "Login (Username and Password)" as UC0
+    usecase "Manage User Accounts and Permissions" as UC1
+    usecase "Run Data Loading Module" as UC2
+    usecase "View Event History" as UC3
+    usecase "Generate Management Reports" as UC4
+    usecase "View Reports" as UC19
+    usecase "Update Equipment Maintenance Status" as UC5
+    usecase "Transfer Tools Between Stations" as UC6
+    usecase "Update Crew Member Availability" as UC7
+    usecase "Open Event" as UC8a
+    usecase "Cancel Event" as UC8b
+    usecase "Define Task Trees and Dependencies" as UC9
+    usecase "Reserve and Allocate Resources" as UC10
+    usecase "Track Event Status in Real-Time" as UC11
+    usecase "Cancel Individual Tasks" as UC12
+    usecase "Close Event" as UC13
+    usecase "Process Billing Request" as UC13a
+    usecase "View Task and Event Status" as UC14
+    usecase "Report Task Completion" as UC15
+    usecase "Report Shift Start and Readiness" as UC16
+    usecase "View Assigned Task Details" as UC17
+    usecase "Report Field Equipment Failure" as UC18
+}
+
+SysAdmin -- UC0
+LogisticsOfficer -- UC0
+Dispatcher -- UC0
+CrewMember -- UC0
+FieldCommander -- UC0
+
+SysAdmin -- UC1
+SysAdmin -- UC2
+SysAdmin -- UC3
+SysAdmin -- UC4
+SysAdmin -- UC19
+
+LogisticsOfficer -- UC5
+LogisticsOfficer -- UC6
+LogisticsOfficer -- UC7
+
+Dispatcher -- UC8a
+Dispatcher -- UC8b
+Dispatcher -- UC9
+Dispatcher -- UC10
+Dispatcher -- UC11
+Dispatcher -- UC12
+Dispatcher -- UC13
+
+FieldCommander -- UC14
+FieldCommander -- UC15
+
+CrewMember -- UC16
+CrewMember -- UC17
+CrewMember -- UC18
+
+UC13a -- BillingSystem
+
+UC13 ..> UC13a : <<include>>
+@enduml
