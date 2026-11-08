@@ -32,23 +32,30 @@ flowchart LR
     SysAdmin(("System Administrator"))
     LogisticsOfficer(("Logistics and\nResources Officer"))
     Dispatcher(("Dispatcher"))
-    FieldCommander(("Field Commander"))
     CrewMember(("Field Crew Member"))
+    FieldCommander(("Field Commander"))
+
+    %% Actor Inheritance
+    FieldCommander -->|<<inherits>>| CrewMember
 
     %% System Boundary
     subgraph CrisisSync ["CrisisSync System"]
         direction TB
         
+        UC0(["Login (Username and Password)"])
+
         UC1(["Manage User Accounts and Permissions"])
         UC2(["Run Data Loading Module"])
         UC3(["View Event History"])
         UC4(["Generate Management Reports"])
+        UC19(["View Reports"])
         
         UC5(["Update Equipment Maintenance Status"])
         UC6(["Transfer Tools Between Stations"])
         UC7(["Update Crew Member Availability"])
         
-        UC8(["Open and Cancel Events"])
+        UC8a(["Open Event"])
+        UC8b(["Cancel Event"])
         UC9(["Define Task Trees and Dependencies"])
         UC10(["Reserve and Allocate Resources"])
         UC11(["Track Event Status in Real-Time"])
@@ -65,7 +72,6 @@ flowchart LR
 
         %% Dependencies
         UC13 -.->|<<include>>| UC13a
-        UC18 -.->|<<extend>>| UC17
     end
 
     %% Secondary Actors / External Systems (Right)
@@ -73,16 +79,24 @@ flowchart LR
     Timer(("System Timer"))
 
     %% Primary Actors Associations
+    SysAdmin --- UC0
+    LogisticsOfficer --- UC0
+    Dispatcher --- UC0
+    CrewMember --- UC0
+    FieldCommander --- UC0
+
     SysAdmin --- UC1
     SysAdmin --- UC2
     SysAdmin --- UC3
     SysAdmin --- UC4
+    SysAdmin --- UC19
 
     LogisticsOfficer --- UC5
     LogisticsOfficer --- UC6
     LogisticsOfficer --- UC7
 
-    Dispatcher --- UC8
+    Dispatcher --- UC8a
+    Dispatcher --- UC8b
     Dispatcher --- UC9
     Dispatcher --- UC10
     Dispatcher --- UC11
