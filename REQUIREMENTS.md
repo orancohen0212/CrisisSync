@@ -169,16 +169,22 @@ NFR2.4 : The system shall extract the timestamps for the SLA calculations exclus
 
 
 
-| Req ID     | Requirement Description (Clean English with "shall")                                                                                                                                                     | Type (FR/NFR) | Mapped Use Case | Test ID |
-| :--------- | :-----------------------------------------------------------------------------------------------------------------------------                                                                           | :-----------: | :-------------- | :-----: |
-| **REQ-01** | The system shall allow a Dispatcher to allocate a predefined resource package to a task currently in the 'Ready' state, executing the request as a single atomic SQL transaction.                        |      FR       | UC_ReserveSpot  | TEST-01 |
-| **REQ-02** | The payment gateway authorization shall return a verification token within a maximum latency of 2.5 seconds under peak load.                           |      NFR      | UC_ChargeEV     | TEST-02 |
-| **REQ-03** | The system shall apply a charger idle penalty of 5 NIS per hour starting 30 minutes after 100% charging completion.                                    |      FR       | UC_ChargeEV     | TEST-03 |
-| **REQ-04** | The system shall apply dynamic filtering on the live map to restrict Students to "Student Zone" spots while allowing Faculty to see all zones.         |      FR       | UC_SearchSpot   | TEST-04 |
-| **REQ-05** | The system shall allow the Campus Traffic Administrator to manually review and either approve or reject a user's Digital Appeal.                       |      FR       | UC_AppealFine   | TEST-05 |
-| **REQ-06** | The EV charging component shall monitor battery status with a precision threshold of exactly 100% complete before triggering the SMS notification.     |      NFR      | UC_ChargeEV     | TEST-06 |
-| **REQ-07** | The mobile terminal shall support the documentation of a Severe Violation based on the physical spatial threshold of a vehicle occupying 2 lines.      |      NFR      | UC_LogViolation | TEST-07 |
-
+| Req ID     | Requirement Description (Clean English with "shall")                                                                                                                                                     | Type (FR/NFR) | Mapped Use Case      | Test ID |
+| :--------- | :-----------------------------------------------------------------------------------------------------------------------------                                                                           | :-----------: | :--------------      | :-----: |
+| **FR1.1** | The system shall allow a Dispatcher to allocate a predefined resource package to a task currently in the 'Ready' state, executing the request as a single atomic SQL transaction.                         |      FR       |UC_AllocateResources  | TEST-01 |
+| **FR1.2** | The system shall immediately release all resources associated with a task (returning their status to 'Available') once the assigned Field Commander reports the task as 'Completed'                       |      FR       | UC_ReportCompletion  | TEST-02 |
+| **FR1.3** | The system shall automatically block the resource allocation process and abort the transaction if even one resource within the requested package is unavailable.                                          |      FR       | UC_AllocateResources | TEST-03 |
+| **NFR1.1**| The system shall execute a resource allocation as a single SQL transaction, ensuring a 100% rollback if even 1 requested resource is unavailable, to prevent partial bookings.                            |      NFR      | UC_AllocateResources | TEST-03 |
+| **NFR1.2** | The system shall push real-time status updates of the allocation to all relevant client stations immediately, requiring exactly 0 polling requests from the clients.                                     |      NFR       | UC_AllocateResources| TEST-04 |
+| **NFR1.3** |The system shall mandate that 100% of users, including the Dispatcher performing the allocation, are authenticated via username and password before granting access.                                      |      NFR      | UC_AllocateResources |TEST-05 |
+| **NFR1.4** | The system shall support concurrent dispatcher actions exclusively over a Local Area Network (LAN) utilizing the OCSF framework over TCP/IP, without using a Web-based interface.                        |      NFR      | UC_AllocateResources | TEST-06 |
+| **FR2.1** | The system shall automatically generate the SLA report exactly at the end of each month, triggered internally by the system clock.                                                                        |      FR       |UC_AutoSLAReport      | TEST-07 |
+| **FR2.2** | The system shall allow a System Administrator to manually generate an SLA report on-demand for any 1 selected past month.                                                                                 |      FR       |UC_ManualSLAReport    | TEST-08 |
+| **FR2.3** | The system shall calculate the SLA metric by computing the average time elapsed from the opening of an event until the closure of the last task within that event, grouped strictly by event types.       |      FR       |UC_AutoSLAReport      | TEST-09 |
+| **NFR2.1**| The system shall restrict access to ensure that 100% of SLA report generation and viewing actions are permitted exclusively to the "System Administrator" role, blocking the other 4 user roles.          |      NFR      | UC_ManualSLAReport   | TEST-10 |
+| **NFR2.2**|The system's reporting module architecture shall be designed to ensure that adding any new report type in the future requires minimal development effort.                                                  |      NFR      | UC_ManualSLAReport   | TEST-11 |
+| **NFR2.3**|The system's graphical interface shall present the SLA report clearly segmented into exactly 5 distinct visual categories, strictly corresponding to the predefined closed list of event types.            |      NFR      |UC_AutoSLAReport      | TEST-12 |
+| **NFR2.4**|The system shall extract the timestamps for the SLA calculations exclusively from the system's Audit Log, relying on its 100% read-only chronological records of event openings and task state changes.    |      NFR      |UC_AutoSLAReport      | TEST-13 |
 ---
 
 ## 4. BDD Acceptance Tests (Given-When-Then)
