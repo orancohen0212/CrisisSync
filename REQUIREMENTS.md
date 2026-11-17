@@ -5,153 +5,15 @@
 
 
 ### Engineering Team Details
-
-- **Student 1:** Oran Cohen | **ID:** 324155845 | **Braude Email:** oran.cohen@e.braude.ac.il
-- **Student 2:** Amit Asaf | **ID:** 207659087 | **Braude Email:** amit.asaf@e.braude.ac.il
-- **Student 3:** Yasmin Askarov | **ID:** 323017012 | **Braude Email:** yasmin.askarov@e.braude.ac.il
-- **Student 4:** Lihi Elias | **ID:** 319041109 | **Braude Email:** lihi.elias@e.braude.ac.il
-
----
-
-## 1. System Use Case Diagram (Mermaid.js)
-
-<!--
-INSTRUCTIONS FOR STUDENTS:
-1. Populate the Mermaid flowchart below based on your audited entities from Part 1, Step 4.
-2. Group human actors inside Primary_Actors and hardware/external systems inside Secondary_Actors.
-3. Place all core Use Cases inside the ParkingSystem boundary subgraph.
-4. Use solid lines without arrows (---) for Actor associations.
-5. Use dashed arrows with explicit stereotypes for dependencies:
-   - Include: BaseUC -.->|"<<include>>"| IncludedUC
-   - Extend:  ExtendingUC -.->|"<<extend>>"| BaseUC
--->
-
-```mermaid
-flowchart LR
-    %% Primary Actors (Left)
-    SysAdmin(("System Administrator"))
-    LogisticsOfficer(("Logistics and\nResources Officer"))
-    Dispatcher(("Dispatcher"))
-    CrewMember(("Field Crew Member"))
-    FieldCommander(("Field Commander"))
-
-    %% Actor Inheritance
-    FieldCommander -->|<<inherits>>| CrewMember
-
-    %% System Boundary
-    subgraph CrisisSync ["CrisisSync System"]
-        direction TB
-        
-        UC0(["Login (Username and Password)"])
-
-        UC1(["Manage User Accounts and Permissions"])
-        UC2(["Run Data Loading Module"])
-        UC3(["View Event History"])
-        UC4(["Generate Management Reports"])
-        UC19(["View Reports"])
-        
-        UC5(["Update Equipment Maintenance Status"])
-        UC6(["Transfer Tools Between Stations"])
-        UC7(["Update Crew Member Availability"])
-        
-        UC8a(["Open Event"])
-        UC8b(["Cancel Event"])
-        UC9(["Define Task Trees and Dependencies"])
-        UC10(["Reserve and Allocate Resources"])
-        UC11(["Track Event Status in Real-Time"])
-        UC12(["Cancel Individual Tasks"])
-        UC13(["Close Event"])
-        UC13a(["Process Billing Request"])
-        
-        UC14(["View Task and Event Status"])
-        UC15(["Report Task Completion"])
-        
-        UC16(["Report Shift Start and Readiness"])
-        UC17(["View Assigned Task Details"])
-        UC18(["Report Field Equipment Failure"])
-
-        %% Dependencies
-        UC13 -.->|<<include>>| UC13a
-    end
-
-    %% Secondary Actors / External Systems (Right)
-    BillingSystem(("National Clearing\nand Billing System"))
-    Timer(("System Timer"))
-
-    %% Primary Actors Associations
-    SysAdmin --- UC0
-    LogisticsOfficer --- UC0
-    Dispatcher --- UC0
-    CrewMember --- UC0
-    FieldCommander --- UC0
-
-    SysAdmin --- UC1
-    SysAdmin --- UC2
-    SysAdmin --- UC3
-    SysAdmin --- UC4
-    SysAdmin --- UC19
-
-    LogisticsOfficer --- UC5
-    LogisticsOfficer --- UC6
-    LogisticsOfficer --- UC7
-
-    Dispatcher --- UC8a
-    Dispatcher --- UC8b
-    Dispatcher --- UC9
-    Dispatcher --- UC10
-    Dispatcher --- UC11
-    Dispatcher --- UC12
-    Dispatcher --- UC13
-
-    FieldCommander --- UC14
-    FieldCommander --- UC15
-
-    CrewMember --- UC16
-    CrewMember --- UC17
-    CrewMember --- UC18
-
-    %% Secondary Actors Associations
-    UC13a --- BillingSystem
-    UC4 --- Timer
-    %% Define Dependencies (Dashed arrows with stereotypes)
-    %% Note: Verify that <<extend>> arrows point toward the base use case!
-```
+- Group 1
+- **Student 1:** Oran Cohen
+- **Student 2:** Amit Asaf 
+- **Student 3:** Yasmin Askarov 
+- **Student 4:** Lihi Elias 
 
 ---
 
-## 2. Business Edge Cases & Concurrency Decisions
-
-<!--
-INSTRUCTIONS FOR STUDENTS:
-Select at least two unresolved business ambiguities, concurrency edge cases, or hardware timeouts
-identified during your AI auditing phase. Document your architectural decision in English below.
--->
-
-### Edge Case 1: Concurrent Parking Spot Reservation
-
-- **Scenario & Ambiguity:** Two registered users open the live map simultaneously, see the exact same available parking spot, and click "Reserve" at the exact same millisecond.
-- **Architectural Resolution:** The system shall implement pessimistic locking on the database record for that specific parking spot. The first request to reach the database acquires the lock and successfully reserves the spot. The second concurrent request is immediately rejected with an "Already Reserved" error, prompting the user's map to refresh.
-- **Impact on System State:** The target spot's database status changes from 'Available' to 'Reserved'. A 15-minute expiration timer is initialized for the successful user. The failed user's account state remains unchanged.
-
-### Edge Case 2: EV Unplugged but Vehicle Not Moved
-
-- **Scenario & Ambiguity:** An EV reaches 100% charge, the 30-minute grace period expires, and the penalty begins. The user arrives and unplugs the charging cable to stop the session, but leaves the vehicle physically parked in the EV spot to attend a class.
-- **Architectural Resolution:** The "Charger Idle Penalty" rule logic shall be tied to physical spot occupancy, not just the charging cable connection. Unplugging the cable ends the electrical transaction, but the 5 NIS/hour penalty continues to accrue until the LPR exit camera or spot occupancy sensor confirms the vehicle has physically vacated the space.
-- **Impact on System State:** The active charging session ends in the payment gateway, but the system continues to append the 5 NIS/hour fee to the user's billing account ledger until physical departure is logged.
-
----
-
-## 3. Requirements Traceability Matrix (RTM)
-
-<!--
-INSTRUCTIONS FOR STUDENTS:
-1. Formulate atomic, single-responsibility requirements using RFC 2119 ("shall") and EARS syntax.
-2. Maintain the starter rows below and ADD at least:
-   - 2 more Functional Requirements (FR) to reach a total of at least 3 FRs.
-   - 2 more Non-Functional Requirements (NFR) to reach a total of at least 3 NFRs.
-3. Every NFR MUST contain an explicit, measurable numeric threshold or SLA latency limit.
--->
-
+## 1. Requirements 
 
 Action 1: Resource Allocation for a Task & Reporting Task Completion
 
@@ -195,6 +57,9 @@ NFR2.4 : The system shall extract the timestamps for the SLA calculations exclus
 
 
 
+## 2. Requirements Traceability Matrix (RTM)
+
+
 | Req ID     | Requirement Description (Clean English with "shall")                                                                                                                                                     | Type (FR/NFR) | Mapped Use Case      | Test ID |
 | :--------- | :-----------------------------------------------------------------------------------------------------------------------------                                                                           | :-----------: | :--------------      | :-----: |
 | **FR1.1** | The system shall allow a Dispatcher to allocate a predefined resource package to a task currently in the 'Ready' state.                                                                                   |      FR       | UC_AllocateResources  | TEST-01 |
@@ -213,14 +78,7 @@ NFR2.4 : The system shall extract the timestamps for the SLA calculations exclus
 | **NFR2.4**|The system shall extract the timestamps for the SLA calculations exclusively from the system's Audit Log, relying on its 100% read-only chronological records of event openings and task state changes.    |      NFR      |UC_AutoSLAReport      | TEST-13 |
 ---
 
-## 4. BDD Acceptance Tests (Given-When-Then)
-
-<!--
-INSTRUCTIONS FOR STUDENTS:
-Author two complete BDD acceptance tests corresponding to the Test IDs in your RTM table.
-- Test 1: Happy Path Operational Flow.
-- Test 2: Exception, Fault, or Automated Penalty Flow.
--->
+## 3. BDD Acceptance Tests (Given-When-Then)
 
 ### Acceptance Test [TEST-01]: Successful Resource Allocation (Happy Path)
 
@@ -256,15 +114,3 @@ Author two complete BDD acceptance tests corresponding to the Test IDs in your R
 
 
 
----
-
-## 5. Pre-Submission Self-Audit Checklist
-
-Before compressing your final ZIP archive (`ex1_ID1_ID2.zip`), verify compliance:
-
-- [ ] All sections of this document are completed exclusively in professional English.
-- [ ] The Mermaid diagram renders without errors in IntelliJ's Split Preview window.
-- [ ] Dependencies (`<<include>>` and `<<extend>>`) have arrows pointing in the architecturally correct directions.
-- [ ] At least two resolved business edge cases are documented with state impact.
-- [ ] The RTM contains at least 3 FR and 3 NFR rows, with all NFRs having explicit numeric thresholds.
-- [ ] Acceptance Test IDs (`TEST-XX`) strictly match the corresponding entries in the RTM table.
