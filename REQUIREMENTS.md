@@ -23,10 +23,8 @@ FR1.2: The system shall abort manual resource allocation transactions immediatel
 failing the allocation process.
 
 NFR1.1 (Transaction Atomicity): The system shall execute the resource package reservation as a single atomic SQL transaction based on the "all or nothing" principle, guaranteeing a 100% rollback if even 1 requested resource is unavailable. 
-
-NFR1.2 (Network Latency & Real-Time Updates): The system shall push all allocation status changes to all relevant client stations immediately via Server Push, requiring exactly 0 polling requests from the client applications.  
-
-NFR1.3 (Security & Access Control): The system shall strictly mandate that 100% of the 5 predefined user types successfully authenticate using a username and password before granting access to any system functionality.
+ 
+NFR1.2 (Security & Access Control): The system shall strictly mandate that 100% of the 5 predefined user types successfully authenticate using a username and password before granting access to any system functionality.
 
 Action 2: SLA Report Generation
 
@@ -49,8 +47,6 @@ NFR3.1 (Performance & Algorithmic Efficiency): The server-side business logic sh
 NFR3.2 (Usability & Error Handling): The system shall display a clear, specific error notification to the Dispatcher's interface within 1 second upon rejecting any operation that creates a circular dependency.
 
 NFR3.3 (Data Integrity & Robustness): The system's backend architecture shall strictly enforce the task state machine rules, automatically blocking 100% of invalid state transition attempts (e.g., preventing a task from transitioning directly from 'Blocked' to 'Active' without passing through 'Ready').
-
-NFR3.4 (Auditability & Traceability): The system shall automatically record exactly 100% of all task state transitions in the centralized Audit Log, permanently capturing the precise system timestamp and the User ID of the individual who triggered the state change.
 
 Action 4: Cascading Task Cancellation
 FR4.1: The system shall automatically calculate and display a confirmation prompt to the Dispatcher prior to task cancellation, explicitly presenting the exact numerical count of all dependent tasks that have not yet reached a final state and will subsequently be cancelled.
@@ -156,7 +152,7 @@ Action 14 : task DAG progression
 
 FR14.1 (Automatic Task Progression in DAG): The system shall scan the event's task dependency tree (DAG) and automatically transition any dependent task to the 'Ready' state strictly if all of its prerequisite tasks have reached the 'Completed' state, upon receiving a task completion report from the Field Commander.
 
-NFR14.1 (Graph Processing Performance): The system shall complete the dependency tree traversal and cycle-checking algorithm (during task creation or dependency update) in less than 500 milliseconds for a Directed Acyclic Graph (DAG) containing up to 100 task nodes.
+FR14.2 (Task Readiness Notification): The system shall automatically push a real-time notification directly to the assigned Field Commander's interface immediately when a dependent task transitions to the 'Ready' state.
 
 Action 15: Authentication & Access Control
 
@@ -166,6 +162,10 @@ NFR15.1 (Security): The system shall block 100% of unauthenticated access attemp
 
 NFR15.2 (UI/UX Architecture): The system shall load a distinct Graphical User Interface (GUI) for each successfully authenticated user, tailored exactly to one of the 5 user types and their specific role.
 
+NFR15.3 (Session Timeout & Security): The system shall automatically terminate a user's active session and force a logout after exactly 15 minutes of continuous system inactivity, requiring full re-authentication to regain access.
+
+NFR15.4 (Data Protection & Cryptography): The system shall cryptographically hash all user passwords utilizing a standard secure hashing algorithm (e.g., SHA-256 or Bcrypt) prior to persistence in the database, strictly preventing the storage of plain-text passwords.
+
 Action 16: System Architecture & Connectivity
 
 FR16.1 (Concurrent Operations): The system shall allow the concurrent execution of operations (such as resource allocation or event closure) from an unlimited number of different workstations connected to the network.
@@ -173,6 +173,18 @@ FR16.1 (Concurrent Operations): The system shall allow the concurrent execution 
 NFR16.1 (Environment & Platform): The system shall operate 100% as a Desktop Application (in its initial phase) and shall strictly prohibit Web-based access via a browser.
 
 NFR16.2 (Communication Protocol): The system shall transmit all data traffic between the client endpoints and the server exclusively over a Local Area Network (LAN) utilizing the TCP/IP protocol and the OCSF framework.
+
+NFR16.3 (Data Backup & Recovery): The system shall execute a full automated backup of the relational database strictly every 24 hours, ensuring the persistence and recovery of all Audit Log and billing records in the event of a critical server failure.
+
+NFR16.4 (Network Resilience & Connection Monitoring): The system shall continuously monitor the TCP/IP connection status of all connected endpoints utilizing a Heartbeat/Keep-Alive mechanism, and shall automatically display an 'Offline' visual indicator on the GUI within 3 seconds of detecting a connection loss.
+
+Action 17: Event Creation & Initialization
+
+FR17.1 (Event Creation): The system shall allow the Dispatcher to create a new event record by selecting exactly 1 predefined event type (e.g., building collapse, fire).
+
+FR17.2 (Automatic DAG Generation): The system shall automatically generate and load the initial task dependency tree (DAG) strictly associated with that specific event type upon the creation of a new event.
+
+NFR17.1 (Initialization Performance): The system shall complete the creation of the new event record and the loading of its associated task DAG into the database in no more than 1500 milliseconds.
 
 
 ## 2. Requirements Traceability Matrix (RTM)
