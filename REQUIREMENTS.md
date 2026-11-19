@@ -62,7 +62,7 @@ NFR2.4 : The system shall extract the timestamps for the SLA calculations exclus
 ## 2. Requirements Traceability Matrix (RTM)
 
 
-| Req ID     | Requirement Description (Clean English with "shall")                                                                                                                                                     | Type (FR/NFR) | Mapped Use Case      | Test ID |
+| Req ID     | Requirement Description                                                                                                                                                      | Type (FR/NFR) | Mapped Use Case      | Test ID |
 | :--------- | :-----------------------------------------------------------------------------------------------------------------------------                                                                           | :-----------: | :--------------      | :-----: |
 | **FR1.1** | The system shall allow a Dispatcher to allocate a predefined resource package to a task currently in the 'Ready' state.                                                                                   |      FR       | UC_AllocateResources  | TEST-01 |
 | **FR1.2** | The system shall immediately release all resources associated with a task (returning their status to 'Available') once the assigned Field Commander reports the task as 'Completed'                       |      FR       | UC_ReportCompletion  | TEST-02 |
