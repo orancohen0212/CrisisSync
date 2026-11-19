@@ -1,8 +1,5 @@
 # Requirements Architecture & System Specification
 
----
-# Requirements Architecture & System Specification
-
 **Course:** Software Engineering Methods  
 **System:** CrisisSync
 
@@ -29,13 +26,15 @@ FR1.3: The system shall automatically block the resource allocation process and 
 
 Non-Functional Requirements (NFR):
 
-NFR1.1 : The system shall execute a resource allocation as a single SQL transaction, ensuring a 100% rollback if even 1 requested resource is unavailable, to prevent partial bookings.
+NFR1.1 : The system shall complete a manual reservation of a package of up to 10 resources and return the result to the Dispatcher within 2 seconds for at least 95% of requests, with 20 Dispatcher stations working concurrently.
 
-NFR1.2 : The system shall push real-time status updates of the allocation to all relevant client stations immediately, requiring exactly 0 polling requests from the clients. 
+NFR1.2 : The system shall guarantee that 50 concurrent reservation attempts for the same resource from different stations produce exactly one successful reservation, zero double reservations, and zero partially reserved packages. 
 
-NFR1.3 : The system shall mandate that 100% of users, including the Dispatcher performing the allocation, are authenticated via username and password before granting access.  
+NFR1.3 : The system shall deliver every pushed status update to all connected relevant stations within 1 second of the transaction commit for at least 95% of updates, using server push with zero periodic polling requests from the client.
 
-NFR1.4 : The system shall support concurrent dispatcher actions exclusively over a Local Area Network (LAN) utilizing the OCSF framework over TCP/IP, without using a Web-based interface.
+NFR1.4 : The system shall allow resource reservation only to authenticated Dispatcher sessions and completion reports only to the assigned Field Commander, and shall reject 100% of unauthorized attempts and record each one in the Audit Log.
+
+
 
 Action 2: Time Compliance and SLA Report Generation
 
@@ -49,36 +48,35 @@ FR2.3: The system shall calculate the SLA metric by computing the average time e
 
 Non-Functional Requirements (NFR):
 
-NFR2.1 : The system shall restrict access to ensure that 100% of SLA report generation and viewing actions are permitted exclusively to the "System Administrator" role, blocking the other 4 user roles.
+NFR2.1 : The system shall generate the SLA Compliance Report for a month containing up to 5,000 Closed events and 50,000 tasks within 30 seconds, and shall keep Dispatcher request response times at or below 2 seconds while the generation runs.
 
-NFR2.2 : The system's reporting module architecture shall be designed to ensure that adding any new report type in the future requires minimal development effort.
+NFR2.2 : The system shall calculate average event durations with an accuracy of 1 second, matching an independently computed reference result for 100% of the events in the verification dataset.
 
-NFR2.3 : The system's graphical interface shall present the SLA report clearly segmented into exactly 5 distinct visual categories, strictly corresponding to the predefined closed list of event types.
+NFR2.3 : The system shall allow a new report type to be added by adding one new class that implements the report-generator interface and one registration entry, with zero modifications to the scheduler, to the existing report generators, and to the report viewing screen.
 
-NFR2.4 : The system shall extract the timestamps for the SLA calculations exclusively from the system's Audit Log, relying on its 100% read-only chronological records of event openings and task state changes.
+NFR2.4 : The system shall start the monthly report generation within 5 minutes after the end of the calendar month according to the system clock, and shall start any generation missed because of server downtime within 5 minutes after the server starts.
 
 
 
 ## 2. Requirements Traceability Matrix (RTM)
 
+| Req ID | Requirement Description (Clean English with "shall") | Type (FR/NFR) | Mapped Use Case | Test ID |
+|--------|------------------------------------------------------|---------------|-----------------|---------|
+| FR1.1 | The system shall allow a Dispatcher to allocate a predefined resource package to a task currently in the 'Ready' state. | FR | UC – Manual Resource Reservation | AT-FR1.1-1<br>AT-FR1.1-2 |
+| FR1.2 | The system shall immediately release all resources associated with a task (returning their status to 'Available') once the assigned Field Commander reports the task as 'Completed'. | FR | UC – Report Task Completion | AT-FR1.2-1<br>AT-FR1.2-2 |
+| FR1.3 | The system shall automatically block the resource allocation process and abort the transaction if even one resource within the requested package is unavailable. | FR | UC – Manual Resource Reservation | AT-FR1.3-1<br>AT-FR1.3-2 |
+| NFR1.1 | The system shall complete a manual reservation of a package of up to 10 resources and return the result to the Dispatcher within 2 seconds for at least 95% of requests, with 20 Dispatcher stations working concurrently. | NFR | UC – Manual Resource Reservation | AT-NFR1.1-1 |
+| NFR1.2 | The system shall guarantee that 50 concurrent reservation attempts for the same resource from different stations produce exactly one successful reservation, zero double reservations, and zero partially reserved packages. | NFR | UC – Manual Resource Reservation | AT-NFR1.2-1<br>AT-NFR1.2-2 |
+| NFR1.3 | The system shall deliver every pushed status update to all connected relevant stations within 1 second of the transaction commit for at least 95% of updates, using server push with zero periodic polling requests from the client. | NFR | UC – Manual Resource Reservation<br>UC – Report Task Completion | AT-NFR1.3-1 |
+| NFR1.4 | The system shall allow resource reservation only to authenticated Dispatcher sessions and completion reports only to the assigned Field Commander, and shall reject 100% of unauthorized attempts and record each one in the Audit Log. | NFR | UC – Manual Resource Reservation<br>UC – Report Task Completion | AT-NFR1.4-1<br>AT-NFR1.4-2<br>AT-NFR1.4-3 |
+| FR2.1 | The system shall automatically generate the SLA report exactly at the end of each month, triggered internally by the system clock. | FR | UC – Generate Management Reports | AT-FR2.1-1 |
+| FR2.2 | The system shall allow a System Administrator to manually generate an SLA report on-demand for any 1 selected past month. | FR | UC – Generate Management Reports | AT-FR2.2-1<br>AT-FR2.2-2 |
+| FR2.3 | The system shall calculate the SLA metric by computing the average time elapsed from the opening of an event until the closure of the last task within that event, grouped strictly by event types. | FR | UC – Generate Management Reports | AT-FR2.3-1<br>AT-FR2.3-2 |
+| NFR2.1 | The system shall generate the SLA Compliance Report for a month containing up to 5,000 Closed events and 50,000 tasks within 30 seconds, and shall keep Dispatcher request response times at or below 2 seconds while the generation runs. | NFR | UC – Generate Management Reports | AT-NFR2.1-1 |
+| NFR2.2 | The system shall calculate average event durations with an accuracy of 1 second, matching an independently computed reference result for 100% of the events in the verification dataset. | NFR | UC – Generate Management Reports | AT-NFR2.2-1 |
+| NFR2.3 | The system shall allow a new report type to be added by adding one new class that implements the report-generator interface and one registration entry, with zero modifications to the scheduler, to the existing report generators, and to the report viewing screen. | NFR | UC – Generate Management Reports<br>UC – View Reports | AT-NFR2.3-1 |
+| NFR2.4 | The system shall start the monthly report generation within 5 minutes after the end of the calendar month according to the system clock, and shall start any generation missed because of server downtime within 5 minutes after the server starts. | NFR | UC – Generate Management Reports | AT-NFR2.4-1<br>AT-NFR2.4-2 |
 
-| Req ID     | Requirement Description                                                                                                                                                      | Type (FR/NFR) | Mapped Use Case      | Test ID |
-| :--------- | :-----------------------------------------------------------------------------------------------------------------------------                                                                           | :-----------: | :--------------      | :-----: |
-| **FR1.1** | The system shall allow a Dispatcher to allocate a predefined resource package to a task currently in the 'Ready' state.                                                                                   |      FR       | UC_AllocateResources  | TEST-01 |
-| **FR1.2** | The system shall immediately release all resources associated with a task (returning their status to 'Available') once the assigned Field Commander reports the task as 'Completed'                       |      FR       | UC_ReportCompletion  | TEST-02 |
-| **FR1.3** | The system shall automatically block the resource allocation process and abort the transaction if even one resource within the requested package is unavailable.                                          |      FR       | UC_AllocateResources | TEST-03 |
-| **NFR1.1**| The system shall execute a resource allocation as a single SQL transaction, ensuring a 100% rollback if even 1 requested resource is unavailable, to prevent partial bookings.                            |      NFR      | UC_AllocateResources | TEST-03 |
-| **NFR1.2** | The system shall push real-time status updates of the allocation to all relevant client stations immediately, requiring exactly 0 polling requests from the clients.                                     |      NFR       | UC_AllocateResources| TEST-04 |
-| **NFR1.3** |The system shall mandate that 100% of users, including the Dispatcher performing the allocation, are authenticated via username and password before granting access.                                      |      NFR      | UC_AllocateResources |TEST-05 |
-| **NFR1.4** | The system shall support concurrent dispatcher actions exclusively over a Local Area Network (LAN) utilizing the OCSF framework over TCP/IP, without using a Web-based interface.                        |      NFR      | UC_AllocateResources | TEST-06 |
-| **FR2.1** | The system shall automatically generate the SLA report exactly at the end of each month, triggered internally by the system clock.                                                                        |      FR       |UC_AutoSLAReport      | TEST-07 |
-| **FR2.2** | The system shall allow a System Administrator to manually generate an SLA report on-demand for any 1 selected past month.                                                                                 |      FR       |UC_ManualSLAReport    | TEST-08 |
-| **FR2.3** | The system shall calculate the SLA metric by computing the average time elapsed from the opening of an event until the closure of the last task within that event, grouped strictly by event types.       |      FR       |UC_AutoSLAReport      | TEST-09 |
-| **NFR2.1**| The system shall restrict access to ensure that 100% of SLA report generation and viewing actions are permitted exclusively to the "System Administrator" role, blocking the other 4 user roles.          |      NFR      | UC_ManualSLAReport   | TEST-10 |
-| **NFR2.2**|The system's reporting module architecture shall be designed to ensure that adding any new report type in the future requires minimal development effort.                                                  |      NFR      | UC_ManualSLAReport   | TEST-11 |
-| **NFR2.3**|The system's graphical interface shall present the SLA report clearly segmented into exactly 5 distinct visual categories, strictly corresponding to the predefined closed list of event types.            |      NFR      |UC_AutoSLAReport      | TEST-12 |
-| **NFR2.4**|The system shall extract the timestamps for the SLA calculations exclusively from the system's Audit Log, relying on its 100% read-only chronological records of event openings and task state changes.    |      NFR      |UC_AutoSLAReport      | TEST-13 |
----
 
 ## 3. BDD Acceptance Tests (Given-When-Then)
 
