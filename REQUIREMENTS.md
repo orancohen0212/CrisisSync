@@ -1,22 +1,10 @@
 # Requirements Architecture & System Specification
 
-**Course:** Software Engineering Methods  
-**System:** CrisisSync
-
-
-### Engineering Team Details
-- Group 1
-- **Student 1:** Oran Cohen
-- **Student 2:** Amit Asaf 
-- **Student 3:** Yasmin Askarov 
-- **Student 4:** Lihi Elias 
-
 ---
 # Requirements Architecture & System Specification
 
 **Course:** Software Engineering Methods  
 **System:** CrisisSync
-
 
 ### Engineering Team Details
 - Group 1
